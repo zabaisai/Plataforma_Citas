@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Cliente{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h2>Panel del Cliente</h2>
+    <p>Bienvenido, {{ session.get('usuario_nombre') }}.</p>
+    <p>Desde aquí podrás agendar citas y revisar tus reservas.</p>
+
+    <div class="acciones">
+        <a class="btn" href="{{ url_for('cliente.agendar_cita') }}">Agendar cita</a>
+        <a class="btn btn-secundario" href="{{ url_for('cliente.mis_citas') }}">Ver mis citas</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Citas del Profesional{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h2>Citas agendadas</h2>
+
+    {% if citas %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Hora inicio</th>
+                    <th>Hora fin</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.cliente_nombre }}</td>
+                    <td>{{ cita.fecha }}</td>
+                    <td>{{ cita.hora_inicio }}</td>
+                    <td>{{ cita.hora_fin }}</td>
+                    <td>{{ cita.motivo }}</td>
+                    <td>{{ cita.estado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay citas agendadas todavía.</p>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestionar Horarios{% endblock %}
+
+{% block content %}
+<section class="card form-card">
+    <h2>Gestionar horarios</h2>
+
+    <form method="POST">
+        <label for="fecha">Fecha</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <label for="hora_inicio">Hora de inicio</label>
+        <input type="time" id="hora_inicio" name="hora_inicio" required>
+
+        <label for="hora_fin">Hora de fin</label>
+        <input type="time" id="hora_fin" name="hora_fin" required>
+
+        <button type="submit" class="btn">Guardar horario</button>
+    </form>
+</section>
+
+<section class="card" style="margin-top: 30px;">
+    <h2>Mis horarios registrados</h2>
+
+    {% if horarios %}
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora inicio</th>
+                    <th>Hora fin</th>
+                    <th>Disponible</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for horario in horarios %}
+                <tr>
+                    <td>{{ horario.fecha }}</td>
+                    <td>{{ horario.hora_inicio }}</td>
+                    <td>{{ horario.hora_fin }}</td>
+                    <td>
+                        {% if horario.disponible %}
+                            Sí
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No has registrado horarios todavía.</p>
+    {% endif %}
+</section>
+{% endblock %}

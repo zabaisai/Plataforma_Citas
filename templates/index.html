@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h2>Bienvenido</h2>
+    <p>Esta es una plataforma web para la gestión de citas entre clientes y profesionales.</p>
+    <p>En esta primera fase ya puedes registrarte e iniciar sesión.</p>
+    <div class="acciones">
+        <a class="btn" href="{{ url_for('auth.register') }}">Registrarse</a>
+        <a class="btn btn-secundario" href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+    </div>
+</section>
+{% endblock %}

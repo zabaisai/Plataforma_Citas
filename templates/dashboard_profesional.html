@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Profesional{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h2>Panel del Profesional</h2>
+    <p>Bienvenido, {{ session.get('usuario_nombre') }}.</p>
+    <p>Desde aquí podrás administrar tus horarios disponibles y ver tus citas.</p>
+
+    <div class="acciones">
+        <a class="btn" href="{{ url_for('profesional.gestionar_horarios') }}">Gestionar horarios</a>
+        <a class="btn btn-secundario" href="{{ url_for('profesional.citas_profesional') }}">Ver citas</a>
+    </div>
+</section>
+{% endblock %}
