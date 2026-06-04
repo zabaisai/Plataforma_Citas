@@ -1,5 +1,13 @@
 package com.plataformacitas.application.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.plataformacitas.domain.exception.CitaNoDisponibleException;
 import com.plataformacitas.domain.exception.RecursoNoEncontradoException;
 import com.plataformacitas.domain.model.Cita;
@@ -10,13 +18,6 @@ import com.plataformacitas.infrastructure.repository.CitaRepository;
 import com.plataformacitas.infrastructure.repository.ClienteRepository;
 import com.plataformacitas.infrastructure.repository.ProfesionalRepository;
 import com.plataformacitas.infrastructure.repository.ServicioRepository;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 
 @Service
 public class CitaService {

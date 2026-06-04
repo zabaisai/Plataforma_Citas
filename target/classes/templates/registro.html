@@ -2,21 +2,77 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro - Plataforma Citas</title>
+    <title>Registro | Plataforma Citas</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>Registro de cliente</h1>
 
-<p style="color:red;" th:if="${error}" th:text="${error}"></p>
+<div class="auth-page">
 
-<form method="post" action="/registro">
-    <input type="text" name="nombre" placeholder="Nombre completo" required>
-    <input type="email" name="email" placeholder="Correo" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
-    <input type="text" name="telefono" placeholder="Teléfono" required>
-    <button type="submit">Registrarme</button>
-</form>
+    <section class="auth-hero">
+        <div class="auth-badge">Registro de clientes</div>
 
-<a href="/login">Ya tengo cuenta</a>
+        <h2>Crea tu cuenta y agenda tus citas de manera rápida y segura.</h2>
+
+        <p>
+            Este módulo permite registrar clientes, almacenar la información de forma persistente
+            y habilitar el acceso al panel personalizado para gestionar citas.
+        </p>
+
+        <div class="hero-features">
+            <div class="hero-feature">
+                <strong>Roles</strong>
+                <span>Cliente, profesional y administrador.</span>
+            </div>
+
+            <div class="hero-feature">
+                <strong>BCrypt</strong>
+                <span>Contraseñas protegidas con hash seguro.</span>
+            </div>
+
+            <div class="hero-feature">
+                <strong>DDD</strong>
+                <span>Entidades de dominio y servicios de aplicación.</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="auth-panel">
+        <div class="auth-card">
+            <h1>Crear cuenta</h1>
+            <p>Regístrate como cliente para empezar a agendar citas.</p>
+
+            <div class="alert-error" th:if="${error}" th:text="${error}"></div>
+
+            <form method="post" action="/registro">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" name="nombre" placeholder="Tu nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" name="email" placeholder="ejemplo@correo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" name="telefono" placeholder="3001234567" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" placeholder="Crea una contraseña" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Crear mi cuenta</button>
+            </form>
+
+            <a class="auth-link" href="/login">Ya tengo cuenta</a>
+        </div>
+    </section>
+
+</div>
+
 </body>
 </html>

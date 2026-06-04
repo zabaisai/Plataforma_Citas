@@ -2,27 +2,42 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Plataforma Citas</title>
+    <title> | Plataforma Citas</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h1>Iniciar sesión</h1>
 
-<p style="color:red;" th:if="${error}" th:text="${error}"></p>
-<p style="color:green;" th:if="${success}" th:text="${success}"></p>
+<div class="auth-page">
+    <div class="auth-card">
+        <h1></h1>
+        <p>Accede a tu panel para gestionar tus citas.</p>
 
-<form method="post" action="/login">
-    <input type="email" name="email" placeholder="Correo" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit">Ingresar</button>
-</form>
+        <div class="alert-error" th:if="${error}" th:text="${error}"></div>
+        <div class="alert-success" th:if="${success}" th:text="${success}"></div>
 
-<a href="/registro">Crear cuenta</a>
+        <form method="post" action="/login">
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" name="email" placeholder="ejemplo@correo.com" required>
+            </div>
 
-<hr>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" placeholder="Tu contraseña" required>
+            </div>
 
-<p><strong>Usuarios de prueba:</strong></p>
-<p>Admin: admin@citas.com / 123456</p>
-<p>Profesional: profesional@citas.com / 123456</p>
+            <button type="submit" class="btn-primary">Ingresar</button>
+        </form>
+
+        <a class="auth-link" href="/registro">Crear cuenta nueva</a>
+
+        <div class="test-users">
+            <strong>Usuarios de prueba</strong>
+            <p>Admin: admin@citas.com / 123456</p>
+            <p>Profesional: profesional@citas.com / 123456</p>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
