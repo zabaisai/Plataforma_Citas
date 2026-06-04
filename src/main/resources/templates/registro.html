@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Plataforma Citas</title>
+</head>
+<body>
+<h1>Registro de cliente</h1>
+
+<p style="color:red;" th:if="${error}" th:text="${error}"></p>
+
+<form method="post" action="/registro">
+    <input type="text" name="nombre" placeholder="Nombre completo" required>
+    <input type="email" name="email" placeholder="Correo" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <input type="text" name="telefono" placeholder="Teléfono" required>
+    <button type="submit">Registrarme</button>
+</form>
+
+<a href="/login">Ya tengo cuenta</a>
+</body>
+</html>

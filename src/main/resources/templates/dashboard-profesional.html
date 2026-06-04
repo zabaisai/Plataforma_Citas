@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cliente - Plataforma Citas</title>
+</head>
+<body>
+
+<h1>Panel de Cliente</h1>
+<p>Bienvenido, <strong th:text="${usuario.nombre}"></strong></p>
+<a href="/logout">Cerrar sesión</a>
+
+<h2>Agendar cita</h2>
+
+<form method="post" action="/cliente/citas">
+
+    <label>Servicio</label>
+    <select name="servicioId" required>
+        <option th:each="servicio : ${servicios}"
+                th:value="${servicio.id}"
+                th:text="${servicio.nombre}">
+        </option>
+    </select>
+
+    <label>Profesional</label>
+    <select name="profesionalId" required>
+        <option th:each="profesional : ${profesionales}"
+                th:value="${profesional.id}"
+                th:text="${profesional.usuario.nombre + ' - ' + profesional.especialidad}">
+        </option>
+    </select>
+
+    <input type="date" name="fecha" required>
+    <input type="time" name="hora" required>
+    <input type="text" name="observaciones" placeholder="Observaciones">
+
+    <button type="submit">Agendar</button>
+</form>
+
+<h2>Mis citas</h2>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Servicio</th>
+        <th>Profesional</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Estado</th>
+        <th>Acción</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="cita : ${citas}">
+        <td th:text="${cita.servicio.nombre}"></td>
+        <td th:text="${cita.profesional.usuario.nombre}"></td>
+        <td th:text="${cita.fecha}"></td>
+        <td th:text="${cita.hora}"></td>
+        <td th:text="${cita.estado}"></td>
+        <td>
+            <form th:action="@{/cliente/citas/{id}/cancelar(id=${cita.id})}" method="post">
+                <button type="submit">Cancelar</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

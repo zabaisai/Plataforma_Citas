@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Plataforma Citas</title>
+</head>
+<body>
+
+<h1>Panel Administrador</h1>
+<a href="/logout">Cerrar sesión</a>
+
+<h2>Usuarios</h2>
+<table border="1">
+    <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+    </tr>
+    <tr th:each="usuario : ${usuarios}">
+        <td th:text="${usuario.nombre}"></td>
+        <td th:text="${usuario.email}"></td>
+        <td th:text="${usuario.rol}"></td>
+    </tr>
+</table>
+
+<h2>Servicios</h2>
+<table border="1">
+    <tr>
+        <th>Nombre</th>
+        <th>Duración</th>
+        <th>Precio</th>
+    </tr>
+    <tr th:each="servicio : ${servicios}">
+        <td th:text="${servicio.nombre}"></td>
+        <td th:text="${servicio.duracionMinutos}"></td>
+        <td th:text="${servicio.precio}"></td>
+    </tr>
+</table>
+
+<h2>Citas</h2>
+<table border="1">
+    <tr>
+        <th>Cliente</th>
+        <th>Profesional</th>
+        <th>Servicio</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Estado</th>
+    </tr>
+    <tr th:each="cita : ${citas}">
+        <td th:text="${cita.cliente.usuario.nombre}"></td>
+        <td th:text="${cita.profesional.usuario.nombre}"></td>
+        <td th:text="${cita.servicio.nombre}"></td>
+        <td th:text="${cita.fecha}"></td>
+        <td th:text="${cita.hora}"></td>
+        <td th:text="${cita.estado}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -1,1 +1,0 @@
-console.log("Sistema de gestión de citas cargado.");

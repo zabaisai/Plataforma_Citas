@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Plataforma Citas</title>
+</head>
+<body>
+<h1>Iniciar sesión</h1>
+
+<p style="color:red;" th:if="${error}" th:text="${error}"></p>
+<p style="color:green;" th:if="${success}" th:text="${success}"></p>
+
+<form method="post" action="/login">
+    <input type="email" name="email" placeholder="Correo" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <button type="submit">Ingresar</button>
+</form>
+
+<a href="/registro">Crear cuenta</a>
+
+<hr>
+
+<p><strong>Usuarios de prueba:</strong></p>
+<p>Admin: admin@citas.com / 123456</p>
+<p>Profesional: profesional@citas.com / 123456</p>
+
+</body>
+</html>
