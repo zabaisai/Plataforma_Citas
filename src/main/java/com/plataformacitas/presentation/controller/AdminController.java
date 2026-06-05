@@ -72,10 +72,16 @@ public class AdminController {
                     descripcion
             );
 
-            redirectAttributes.addFlashAttribute("success", "Profesional creado correctamente.");
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Profesional creado correctamente."
+            );
 
         } catch (DominioException | IllegalArgumentException ex) {
-            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    ex.getMessage()
+            );
         }
 
         return "redirect:/admin/dashboard#crear-profesional";
@@ -87,6 +93,7 @@ public class AdminController {
             @RequestParam String descripcion,
             @RequestParam Integer duracionMinutos,
             @RequestParam Double precio,
+            @RequestParam String especialidadRequerida,
             RedirectAttributes redirectAttributes
     ) {
         try {
@@ -94,13 +101,20 @@ public class AdminController {
                     nombre,
                     descripcion,
                     duracionMinutos,
-                    precio
+                    precio,
+                    especialidadRequerida
             );
 
-            redirectAttributes.addFlashAttribute("success", "Servicio creado correctamente.");
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Servicio creado correctamente."
+            );
 
         } catch (DominioException | IllegalArgumentException ex) {
-            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    ex.getMessage()
+            );
         }
 
         return "redirect:/admin/dashboard#crear-servicio";
@@ -115,10 +129,16 @@ public class AdminController {
         try {
             servicioService.actualizarPrecio(id, precio);
 
-            redirectAttributes.addFlashAttribute("success", "Precio actualizado correctamente.");
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Precio actualizado correctamente."
+            );
 
         } catch (DominioException | IllegalArgumentException ex) {
-            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    ex.getMessage()
+            );
         }
 
         return "redirect:/admin/dashboard#servicios";

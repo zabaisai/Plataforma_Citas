@@ -1,25 +1,35 @@
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 20px;
+}
+
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin-top: 18px;
     overflow: hidden;
-    border-radius: 18px;
+    border-radius: 20px;
     background: var(--white);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+    border: 1px solid var(--border);
 }
 
 thead {
-    background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
 }
 
 thead th {
     text-align: left;
-    padding: 16px 18px;
-    font-size: 14px;
+    padding: 17px 18px;
+    font-size: 13px;
     font-weight: 900;
-    color: var(--dark);
+    color: #0f172a;
     border-bottom: 1px solid var(--border);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 tbody td {
@@ -41,6 +51,15 @@ tbody tr:hover {
 tbody tr:last-child td {
     border-bottom: none;
 }
+
+td[colspan] {
+    text-align: center;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 26px;
+    background: #f8fafc;
+}
+
 td form {
     margin: 0;
 }
@@ -55,17 +74,16 @@ td input[type="number"] {
 td .action-btn {
     white-space: nowrap;
 }
-td form {
-    margin: 0;
+
+.table-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
-td input[type="number"] {
-    max-width: 150px;
-    padding: 10px 12px;
-    border-radius: 12px;
-    font-size: 14px;
-}
-
-td .action-btn {
-    white-space: nowrap;
+@media (max-width: 900px) {
+    table {
+        min-width: 780px;
+    }
 }

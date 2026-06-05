@@ -3,19 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel Cliente | Plataforma Citas</title>
-    <link rel="stylesheet" href="/css/main.css?v=20">
+    <link rel="stylesheet" href="/css/main.css?v=25">
 </head>
 <body>
 
 <div class="dashboard">
 
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Menú principal del cliente">
+    <div class="sidebar-brand">
+        <div class="sidebar-logo">📅</div>
         <h2>Plataforma Citas</h2>
-        <a href="/cliente/dashboard">🏠 Mi panel</a>
-        <a href="#agendar">📅 Agendar cita</a>
-        <a href="#mis-citas">📋 Mis citas</a>
-        <a href="/logout">🚪 Cerrar sesión</a>
-    </aside>
+        <p>Panel de cliente para agendar, consultar y administrar tus citas.</p>
+
+        <div class="sidebar-status">
+            <span class="sidebar-status-dot"></span>
+            <span>Sesión activa: Cliente</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegación del cliente">
+        <a class="sidebar-link active" href="/cliente/dashboard">
+            <span class="sidebar-icon">🏠</span>
+            <span>Mi panel</span>
+        </a>
+
+        <a class="sidebar-link" href="#agendar">
+            <span class="sidebar-icon">📅</span>
+            <span>Agendar cita</span>
+        </a>
+
+        <a class="sidebar-link" href="#mis-citas">
+            <span class="sidebar-icon">📋</span>
+            <span>Mis citas</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-footer">
+        <a class="sidebar-link logout" href="/logout">
+            <span class="sidebar-icon">🚪</span>
+            <span>Cerrar sesión</span>
+        </a>
+    </div>
+</aside>
 
     <main class="main-content">
 
@@ -25,12 +56,12 @@
                 <p>
                     Bienvenido,
                     <strong th:text="${usuario.nombre}">Cliente</strong>.
-                    Desde aquí puedes agendar, reprogramar y consultar tus citas.
+                    Primero selecciona un servicio y el sistema te mostrará los profesionales disponibles.
                 </p>
             </div>
         </section>
 
-        <section class="grid">
+        <section class="grid" aria-label="Resumen del cliente">
             <div class="stat-card">
                 <h3>Servicios disponibles</h3>
                 <p th:text="${#lists.size(servicios)}">0</p>
@@ -47,7 +78,7 @@
             </div>
         </section>
 
-        <section class="card" th:if="${proximaCita != null}">
+        <section class="card" th:if="${proximaCita != null}" role="status" aria-live="polite">
             <h2>Recordatorio de próxima cita</h2>
             <p>
                 Tienes una cita próxima el
@@ -62,16 +93,21 @@
         <section class="card" id="agendar">
             <h2>Agendar nueva cita</h2>
             <p>
-                Selecciona el servicio, el profesional y la fecha. El sistema cargará automáticamente
-                las horas disponibles configuradas por el profesional.
+                Selecciona primero el servicio. Después el sistema cargará solo los profesionales que atienden ese servicio.
             </p>
 
-            <form method="post" action="/cliente/citas">
+            <form method="post" action="/cliente/citas" aria-describedby="ayuda-agendar">
+                <p id="ayuda-agendar" class="form-help">
+                    Los campos marcados con <span class="required-mark">*</span> son obligatorios.
+                </p>
+
                 <div class="form-row">
 
                     <div class="form-group">
-                        <label>Servicio</label>
-                        <select name="servicioId" required>
+                        <label for="servicioId">
+                            Servicio <span class="required-mark">*</span>
+                        </label>
+                        <select name="servicioId" id="servicioId" required aria-required="true">
                             <option value="">Selecciona un servicio</option>
                             <option th:each="servicio : ${servicios}"
                                     th:value="${servicio.id}"
@@ -79,39 +115,61 @@
                                 Servicio
                             </option>
                         </select>
+                        <span class="form-help">
+                            Elige el tipo de consulta que necesitas.
+                        </span>
                     </div>
 
                     <div class="form-group">
-                        <label>Profesional</label>
-                        <select name="profesionalId" id="profesionalId" required>
-                            <option value="">Selecciona un profesional</option>
-                            <option th:each="profesional : ${profesionales}"
-                                    th:value="${profesional.id}"
-                                    th:text="${profesional.usuario.nombre + ' - ' + profesional.especialidad}">
-                                Profesional
-                            </option>
+                        <label for="profesionalId">
+                            Profesional disponible <span class="required-mark">*</span>
+                        </label>
+                        <select name="profesionalId" id="profesionalId" required aria-required="true" aria-live="polite">
+                            <option value="">Primero selecciona un servicio</option>
                         </select>
+                        <span class="form-help">
+                            Solo aparecerán profesionales relacionados con el servicio seleccionado.
+                        </span>
                     </div>
 
                     <div class="form-group">
-                        <label>Fecha</label>
-                        <input type="date" name="fecha" id="fechaCita" required>
+                        <label for="fechaCita">
+                            Fecha <span class="required-mark">*</span>
+                        </label>
+                        <input type="date" name="fecha" id="fechaCita" required aria-required="true">
+                        <span class="form-help">
+                            Selecciona una fecha futura disponible.
+                        </span>
                     </div>
 
                     <div class="form-group">
-                        <label>Hora disponible</label>
-                        <select name="hora" id="horaDisponible" required>
+                        <label for="horaDisponible">
+                            Hora disponible <span class="required-mark">*</span>
+                        </label>
+                        <select name="hora" id="horaDisponible" required aria-required="true" aria-live="polite">
                             <option value="">Primero selecciona profesional y fecha</option>
                         </select>
+                        <span class="form-help">
+                            Las horas se cargan automáticamente según la agenda del profesional.
+                        </span>
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Observaciones</label>
-                        <textarea name="observaciones" rows="3" placeholder="Escribe una observación opcional"></textarea>
+                        <label for="observaciones">Observaciones</label>
+                        <textarea name="observaciones"
+                                  id="observaciones"
+                                  rows="3"
+                                  placeholder="Escribe una observación opcional"
+                                  aria-describedby="ayuda-observaciones"></textarea>
+                        <span id="ayuda-observaciones" class="form-help">
+                            Este campo es opcional. Puedes agregar detalles importantes para el profesional.
+                        </span>
                     </div>
 
                     <div class="form-group full-width">
-                        <button type="submit" class="btn-primary">Agendar cita</button>
+                        <button type="submit" class="btn-primary" aria-label="Agendar nueva cita">
+                            Agendar cita
+                        </button>
                     </div>
 
                 </div>
@@ -124,12 +182,12 @@
             <table>
                 <thead>
                 <tr>
-                    <th>Servicio</th>
-                    <th>Profesional</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    <th scope="col">Servicio</th>
+                    <th scope="col">Profesional</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
                 </tr>
                 </thead>
 
@@ -151,7 +209,8 @@
                     <td>
                         <a th:if="${cita.estado.name() != 'CANCELADA' and cita.estado.name() != 'COMPLETADA'}"
                            th:href="@{/cliente/citas/{id}/reprogramar(id=${cita.id})}"
-                           class="action-btn">
+                           class="action-btn"
+                           th:attr="aria-label=${'Reprogramar cita con ' + cita.profesional.usuario.nombre + ' el ' + cita.fecha}">
                             Reprogramar
                         </a>
 
@@ -159,7 +218,11 @@
                               th:action="@{/cliente/citas/{id}/cancelar(id=${cita.id})}"
                               method="post"
                               style="display:inline;">
-                            <button type="submit" class="action-btn danger">Cancelar</button>
+                            <button type="submit"
+                                    class="action-btn danger"
+                                    th:attr="aria-label=${'Cancelar cita con ' + cita.profesional.usuario.nombre + ' el ' + cita.fecha}">
+                                Cancelar
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -175,17 +238,67 @@
 
 </div>
 
-<script type="module" src="/js/main.js?v=6"></script>
+<script type="module" src="/js/main.js?v=30"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const servicioSelect = document.getElementById("servicioId");
         const profesionalSelect = document.getElementById("profesionalId");
         const fechaInput = document.getElementById("fechaCita");
         const horaSelect = document.getElementById("horaDisponible");
 
-        if (!profesionalSelect || !fechaInput || !horaSelect) {
-            console.error("No se encontraron los campos necesarios para cargar horarios.");
+        if (!servicioSelect || !profesionalSelect || !fechaInput || !horaSelect) {
+            console.error("No se encontraron los campos necesarios.");
             return;
+        }
+
+        async function cargarProfesionalesPorServicio() {
+            const servicioId = servicioSelect.value;
+
+            profesionalSelect.innerHTML = '<option value="">Cargando profesionales...</option>';
+            profesionalSelect.setAttribute("aria-invalid", "false");
+
+            horaSelect.innerHTML = '<option value="">Primero selecciona profesional y fecha</option>';
+            horaSelect.setAttribute("aria-invalid", "false");
+
+            if (!servicioId) {
+                profesionalSelect.innerHTML = '<option value="">Primero selecciona un servicio</option>';
+                profesionalSelect.setAttribute("aria-invalid", "true");
+                return;
+            }
+
+            try {
+                const respuesta = await fetch(`/api/servicios/${servicioId}/profesionales`);
+
+                if (!respuesta.ok) {
+                    profesionalSelect.innerHTML = '<option value="">Error cargando profesionales</option>';
+                    profesionalSelect.setAttribute("aria-invalid", "true");
+                    return;
+                }
+
+                const profesionales = await respuesta.json();
+
+                if (!profesionales || profesionales.length === 0) {
+                    profesionalSelect.innerHTML = '<option value="">No hay profesionales para este servicio</option>';
+                    profesionalSelect.setAttribute("aria-invalid", "true");
+                    return;
+                }
+
+                profesionalSelect.innerHTML = '<option value="">Selecciona un profesional</option>';
+                profesionalSelect.setAttribute("aria-invalid", "false");
+
+                profesionales.forEach(function (profesional) {
+                    const option = document.createElement("option");
+                    option.value = profesional.id;
+                    option.textContent = profesional.usuario.nombre + " - " + profesional.especialidad;
+                    profesionalSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error("Error cargando profesionales:", error);
+                profesionalSelect.innerHTML = '<option value="">Error cargando profesionales</option>';
+                profesionalSelect.setAttribute("aria-invalid", "true");
+            }
         }
 
         async function cargarHorasDisponibles() {
@@ -194,10 +307,12 @@
 
             if (!profesionalId || !fecha) {
                 horaSelect.innerHTML = '<option value="">Primero selecciona profesional y fecha</option>';
+                horaSelect.setAttribute("aria-invalid", "true");
                 return;
             }
 
             horaSelect.innerHTML = '<option value="">Cargando horarios...</option>';
+            horaSelect.setAttribute("aria-invalid", "false");
 
             try {
                 const url = `/api/profesionales/${profesionalId}/horarios-disponibles?fecha=${fecha}`;
@@ -205,7 +320,7 @@
 
                 if (!respuesta.ok) {
                     horaSelect.innerHTML = '<option value="">Error cargando horarios</option>';
-                    console.error("Error HTTP:", respuesta.status);
+                    horaSelect.setAttribute("aria-invalid", "true");
                     return;
                 }
 
@@ -213,10 +328,12 @@
 
                 if (!horas || horas.length === 0) {
                     horaSelect.innerHTML = '<option value="">No hay horarios disponibles para esta fecha</option>';
+                    horaSelect.setAttribute("aria-invalid", "true");
                     return;
                 }
 
                 horaSelect.innerHTML = '<option value="">Selecciona una hora disponible</option>';
+                horaSelect.setAttribute("aria-invalid", "false");
 
                 horas.forEach(function (hora) {
                     const option = document.createElement("option");
@@ -228,13 +345,13 @@
             } catch (error) {
                 console.error("Error cargando horarios:", error);
                 horaSelect.innerHTML = '<option value="">Error cargando horarios</option>';
+                horaSelect.setAttribute("aria-invalid", "true");
             }
         }
 
+        servicioSelect.addEventListener("change", cargarProfesionalesPorServicio);
         profesionalSelect.addEventListener("change", cargarHorasDisponibles);
         fechaInput.addEventListener("change", cargarHorasDisponibles);
-
-        cargarHorasDisponibles();
     });
 </script>
 

@@ -1,10 +1,6 @@
 package com.plataformacitas.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "servicios")
@@ -22,20 +18,33 @@ public class Servicio {
 
     private Double precio;
 
+    private String especialidadRequerida;
+
     private boolean activo = true;
 
     public Servicio() {
     }
 
-    public Servicio(String nombre, String descripcion, Integer duracionMinutos, Double precio) {
+    public Servicio(
+            String nombre,
+            String descripcion,
+            Integer duracionMinutos,
+            Double precio,
+            String especialidadRequerida
+    ) {
         if (precio == null || precio <= 0) {
             throw new IllegalArgumentException("El precio debe ser mayor a cero.");
+        }
+
+        if (especialidadRequerida == null || especialidadRequerida.isBlank()) {
+            throw new IllegalArgumentException("La especialidad requerida no puede estar vacía.");
         }
 
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracionMinutos = duracionMinutos;
         this.precio = precio;
+        this.especialidadRequerida = especialidadRequerida;
     }
 
     public void actualizarPrecio(Double nuevoPrecio) {
@@ -68,6 +77,10 @@ public class Servicio {
 
     public Double getPrecio() {
         return precio;
+    }
+
+    public String getEspecialidadRequerida() {
+        return especialidadRequerida;
     }
 
     public boolean isActivo() {

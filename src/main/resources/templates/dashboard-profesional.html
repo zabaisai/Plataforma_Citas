@@ -3,19 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel Profesional | Plataforma Citas</title>
-    <link rel="stylesheet" href="/css/main.css?v=20">
+    <link rel="stylesheet" href="/css/main.css?v=25">
+    <link rel="stylesheet" href="/css/components/sidebar.css?v=25">
 </head>
 <body>
 
 <div class="dashboard">
 
-    <aside class="sidebar">
+<aside class="sidebar" aria-label="Menú principal del profesional">
+    <div class="sidebar-brand">
+        <div class="sidebar-logo">🧑‍⚕️</div>
         <h2>Plataforma Citas</h2>
-        <a href="/profesional/dashboard">🏠 Mi panel</a>
-        <a href="/profesional/horarios">🕒 Mis horarios</a>
-        <a href="/profesional/dashboard#agenda">📋 Agenda</a>
-        <a href="/logout">🚪 Cerrar sesión</a>
-    </aside>
+        <p>Panel profesional para gestionar agenda, horarios y estados de citas.</p>
+
+        <div class="sidebar-status">
+            <span class="sidebar-status-dot"></span>
+            <span>Sesión activa: Profesional</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegación del profesional">
+        <a class="sidebar-link active" href="/profesional/dashboard">
+            <span class="sidebar-icon">🏠</span>
+            <span>Mi panel</span>
+        </a>
+
+        <a class="sidebar-link" href="/profesional/horarios">
+            <span class="sidebar-icon">🕒</span>
+            <span>Mis horarios</span>
+        </a>
+
+        <a class="sidebar-link" href="/profesional/dashboard#agenda">
+            <span class="sidebar-icon">📋</span>
+            <span>Agenda</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-footer">
+        <a class="sidebar-link logout" href="/logout">
+            <span class="sidebar-icon">🚪</span>
+            <span>Cerrar sesión</span>
+        </a>
+    </div>
+</aside>
 
     <main class="main-content">
 
@@ -30,10 +62,19 @@
             </div>
         </section>
 
-        <div class="alert-error" th:if="${error}" th:text="${error}"></div>
-        <div class="alert-success" th:if="${success}" th:text="${success}"></div>
+        <div class="alert-error"
+             th:if="${error}"
+             th:text="${error}"
+             role="alert"
+             aria-live="assertive"></div>
 
-        <section class="grid">
+        <div class="alert-success"
+             th:if="${success}"
+             th:text="${success}"
+             role="status"
+             aria-live="polite"></div>
+
+        <section class="grid" aria-label="Resumen del profesional">
             <div class="stat-card">
                 <h3>Total de citas</h3>
                 <p th:text="${#lists.size(citas)}">0</p>
@@ -50,28 +91,33 @@
             </div>
         </section>
 
-        <section class="card" th:if="${!#lists.isEmpty(citasProximas)}">
+        <section class="card"
+                 th:if="${!#lists.isEmpty(citasProximas)}"
+                 role="status"
+                 aria-live="polite">
             <h2>Recordatorios próximos</h2>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Servicio</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                </tr>
-                </thead>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Servicio</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                    </tr>
+                    </thead>
 
-                <tbody>
-                <tr th:each="cita : ${citasProximas}">
-                    <td th:text="${cita.cliente.usuario.nombre}">Cliente</td>
-                    <td th:text="${cita.servicio.nombre}">Servicio</td>
-                    <td th:text="${cita.fecha}">Fecha</td>
-                    <td th:text="${cita.hora}">Hora</td>
-                </tr>
-                </tbody>
-            </table>
+                    <tbody>
+                    <tr th:each="cita : ${citasProximas}">
+                        <td th:text="${cita.cliente.usuario.nombre}">Cliente</td>
+                        <td th:text="${cita.servicio.nombre}">Servicio</td>
+                        <td th:text="${cita.fecha}">Fecha</td>
+                        <td th:text="${cita.hora}">Hora</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
         <section class="card" id="agenda">
@@ -80,68 +126,81 @@
                 En esta sección puedes revisar las citas solicitadas por los clientes y cambiar su estado.
             </p>
 
-            <table>
-                <thead>
-                <tr>
-                    <th>Cliente</th>
-                    <th>Servicio</th>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Servicio</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                    </thead>
 
-                <tbody>
-                <tr th:each="cita : ${citas}">
-                    <td th:text="${cita.cliente.usuario.nombre}">Cliente</td>
-                    <td th:text="${cita.servicio.nombre}">Servicio</td>
-                    <td th:text="${cita.fecha}">Fecha</td>
-                    <td th:text="${cita.hora}">Hora</td>
-                    <td>
-                        <span class="badge"
-                              th:classappend="${cita.estado.name() == 'PENDIENTE'} ? ' badge-pendiente' :
-                                              (${cita.estado.name() == 'CONFIRMADA'} ? ' badge-confirmada' :
-                                              (${cita.estado.name() == 'CANCELADA'} ? ' badge-cancelada' : ' badge-completada'))"
-                              th:text="${cita.estado}">
-                            Estado
-                        </span>
-                    </td>
-                    <td>
-                        <form th:if="${cita.estado.name() == 'PENDIENTE'}"
-                              th:action="@{/profesional/citas/{id}/confirmar(id=${cita.id})}"
-                              method="post"
-                              style="display:inline;">
-                            <button type="submit" class="action-btn success">Confirmar</button>
-                        </form>
+                    <tbody>
+                    <tr th:each="cita : ${citas}">
+                        <td th:text="${cita.cliente.usuario.nombre}">Cliente</td>
+                        <td th:text="${cita.servicio.nombre}">Servicio</td>
+                        <td th:text="${cita.fecha}">Fecha</td>
+                        <td th:text="${cita.hora}">Hora</td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${cita.estado.name() == 'PENDIENTE'} ? ' badge-pendiente' :
+                                                  (${cita.estado.name() == 'CONFIRMADA'} ? ' badge-confirmada' :
+                                                  (${cita.estado.name() == 'CANCELADA'} ? ' badge-cancelada' : ' badge-completada'))"
+                                  th:text="${cita.estado}">
+                                Estado
+                            </span>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <form th:if="${cita.estado.name() == 'PENDIENTE'}"
+                                      th:action="@{/profesional/citas/{id}/confirmar(id=${cita.id})}"
+                                      method="post">
+                                    <button type="submit"
+                                            class="action-btn success"
+                                            th:attr="aria-label=${'Confirmar cita de ' + cita.cliente.usuario.nombre + ' el ' + cita.fecha}">
+                                        Confirmar
+                                    </button>
+                                </form>
 
-                        <form th:if="${cita.estado.name() == 'CONFIRMADA'}"
-                              th:action="@{/profesional/citas/{id}/completar(id=${cita.id})}"
-                              method="post"
-                              style="display:inline;">
-                            <button type="submit" class="action-btn">Completar</button>
-                        </form>
+                                <form th:if="${cita.estado.name() == 'CONFIRMADA'}"
+                                      th:action="@{/profesional/citas/{id}/completar(id=${cita.id})}"
+                                      method="post">
+                                    <button type="submit"
+                                            class="action-btn"
+                                            th:attr="aria-label=${'Completar cita de ' + cita.cliente.usuario.nombre + ' el ' + cita.fecha}">
+                                        Completar
+                                    </button>
+                                </form>
 
-                        <form th:if="${cita.estado.name() != 'CANCELADA' and cita.estado.name() != 'COMPLETADA'}"
-                              th:action="@{/profesional/citas/{id}/cancelar(id=${cita.id})}"
-                              method="post"
-                              style="display:inline;">
-                            <button type="submit" class="action-btn danger">Cancelar</button>
-                        </form>
-                    </td>
-                </tr>
+                                <form th:if="${cita.estado.name() != 'CANCELADA' and cita.estado.name() != 'COMPLETADA'}"
+                                      th:action="@{/profesional/citas/{id}/cancelar(id=${cita.id})}"
+                                      method="post">
+                                    <button type="submit"
+                                            class="action-btn danger"
+                                            th:attr="aria-label=${'Cancelar cita de ' + cita.cliente.usuario.nombre + ' el ' + cita.fecha}">
+                                        Cancelar
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
 
-                <tr th:if="${citas == null or #lists.isEmpty(citas)}">
-                    <td colspan="6">No tienes citas asignadas actualmente.</td>
-                </tr>
-                </tbody>
-            </table>
+                    <tr th:if="${citas == null or #lists.isEmpty(citas)}">
+                        <td colspan="6">No tienes citas asignadas actualmente.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
     </main>
 
 </div>
 
-<script type="module" src="/js/main.js?v=20"></script>
+<script type="module" src="/js/main.js?v=25"></script>
 </body>
 </html>

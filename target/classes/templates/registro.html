@@ -2,78 +2,137 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro | Plataforma Citas</title>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/main.css?v=22">
 </head>
 <body>
 
 <div class="auth-page">
 
-    <section class="auth-hero">
-        <div class="auth-badge">Registro de clientes</div>
+    <section class="auth-hero" aria-label="Información sobre el registro">
+        <div class="auth-badge">Registro de cliente</div>
 
-        <h2>Crea tu cuenta y agenda tus citas de manera rápida y segura.</h2>
+        <h2>Crea tu cuenta y agenda tus citas de forma rápida y organizada.</h2>
 
         <p>
-            Este módulo permite registrar clientes, almacenar la información de forma persistente
-            y habilitar el acceso al panel personalizado para gestionar citas.
+            Regístrate como cliente para consultar servicios disponibles, seleccionar profesionales,
+            elegir horarios y administrar tus citas desde tu propio panel.
         </p>
 
-        <div class="hero-features">
+        <div class="hero-features" aria-label="Beneficios del registro">
             <div class="hero-feature">
-                <strong>Roles</strong>
-                <span>Cliente, profesional y administrador.</span>
+                <strong>Agenda</strong>
+                <span>Selecciona servicios, profesionales y horarios disponibles.</span>
             </div>
 
             <div class="hero-feature">
-                <strong>BCrypt</strong>
-                <span>Contraseñas protegidas con hash seguro.</span>
+                <strong>Control</strong>
+                <span>Consulta, reprograma o cancela tus citas fácilmente.</span>
             </div>
 
             <div class="hero-feature">
-                <strong>DDD</strong>
-                <span>Entidades de dominio y servicios de aplicación.</span>
+                <strong>Acceso</strong>
+                <span>Ingresa a tu panel de cliente con correo y contraseña.</span>
             </div>
         </div>
     </section>
 
-    <section class="auth-panel">
-        <div class="auth-card">
-            <h1>Crear cuenta</h1>
-            <p>Regístrate como cliente para empezar a agendar citas.</p>
+    <main class="auth-panel">
+        <section class="auth-card" aria-labelledby="titulo-registro">
+            <h1 id="titulo-registro">Crear cuenta</h1>
+            <p>Completa tus datos para registrarte como cliente.</p>
 
-            <div class="alert-error" th:if="${error}" th:text="${error}"></div>
+            <div class="alert-error"
+                 th:if="${error}"
+                 th:text="${error}"
+                 role="alert"
+                 aria-live="assertive"></div>
 
-            <form method="post" action="/registro">
+            <div class="alert-success"
+                 th:if="${success}"
+                 th:text="${success}"
+                 role="status"
+                 aria-live="polite"></div>
+
+            <form method="post" action="/registro" aria-describedby="ayuda-registro">
+                <p id="ayuda-registro" class="form-help">
+                    Los campos marcados con <span class="required-mark">*</span> son obligatorios.
+                </p>
+
                 <div class="form-group">
-                    <label>Nombre completo</label>
-                    <input type="text" name="nombre" placeholder="Tu nombre" required>
+                    <label for="nombre">
+                        Nombre completo <span class="required-mark">*</span>
+                    </label>
+                    <input type="text"
+                           id="nombre"
+                           name="nombre"
+                           placeholder="Tu nombre completo"
+                           autocomplete="name"
+                           required
+                           aria-required="true">
                 </div>
 
                 <div class="form-group">
-                    <label>Correo electrónico</label>
-                    <input type="email" name="email" placeholder="ejemplo@correo.com" required>
+                    <label for="email">
+                        Correo electrónico <span class="required-mark">*</span>
+                    </label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="ejemplo@correo.com"
+                           autocomplete="email"
+                           required
+                           aria-required="true">
                 </div>
 
                 <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="text" name="telefono" placeholder="3001234567" required>
+                    <label for="telefono">
+                        Teléfono <span class="required-mark">*</span>
+                    </label>
+                    <input type="tel"
+                           id="telefono"
+                           name="telefono"
+                           placeholder="3001234567"
+                           autocomplete="tel"
+                           required
+                           aria-required="true"
+                           aria-describedby="ayuda-telefono">
+                    <span id="ayuda-telefono" class="form-help">
+                        Ingresa un número de contacto para la gestión de tus citas.
+                    </span>
                 </div>
 
                 <div class="form-group">
-                    <label>Contraseña</label>
-                    <input type="password" name="password" placeholder="Crea una contraseña" required>
+                    <label for="password">
+                        Contraseña <span class="required-mark">*</span>
+                    </label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           placeholder="Crea una contraseña"
+                           autocomplete="new-password"
+                           required
+                           aria-required="true"
+                           aria-describedby="ayuda-password">
+                    <span id="ayuda-password" class="form-help">
+                        Usa una contraseña fácil de recordar y difícil de adivinar.
+                    </span>
                 </div>
 
-                <button type="submit" class="btn-primary">Crear mi cuenta</button>
+                <button type="submit" class="btn-primary" aria-label="Crear cuenta como cliente">
+                    Crear cuenta
+                </button>
             </form>
 
-            <a class="auth-link" href="/login">Ya tengo cuenta</a>
-        </div>
-    </section>
+            <a class="auth-link" href="/login" aria-label="Volver al inicio de sesión">
+                Ya tengo una cuenta
+            </a>
+        </section>
+    </main>
 
 </div>
 
-<script type="module" src="/js/main.js"></script>
+<script type="module" src="/js/main.js?v=22"></script>
 </body>
 </html>

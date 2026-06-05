@@ -73,3 +73,22 @@ textarea {
         grid-template-columns: 1fr;
     }
 }
+.form-help {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12);
+}
+
+.required-mark {
+    color: var(--danger);
+    font-weight: 900;
+}

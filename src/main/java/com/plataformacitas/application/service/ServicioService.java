@@ -1,14 +1,13 @@
 package com.plataformacitas.application.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.plataformacitas.domain.exception.DatosInvalidosException;
 import com.plataformacitas.domain.exception.RecursoNoEncontradoException;
 import com.plataformacitas.domain.model.Servicio;
 import com.plataformacitas.infrastructure.repository.ServicioRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ServicioService {
@@ -36,15 +35,21 @@ public class ServicioService {
             String nombre,
             String descripcion,
             Integer duracionMinutos,
-            Double precio
+            Double precio,
+            String especialidadRequerida
     ) {
         validarPrecio(precio);
+
+        if (especialidadRequerida == null || especialidadRequerida.isBlank()) {
+            throw new DatosInvalidosException("La especialidad requerida no puede estar vacía.");
+        }
 
         Servicio servicio = new Servicio(
                 nombre,
                 descripcion,
                 duracionMinutos,
-                precio
+                precio,
+                especialidadRequerida
         );
 
         return servicioRepository.save(servicio);
