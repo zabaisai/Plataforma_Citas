@@ -2,60 +2,247 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Plataforma Citas</title>
+    <title>Panel Administrador | Plataforma Citas</title>
+    <link rel="stylesheet" href="/css/main.css?v=20">
 </head>
 <body>
 
-<h1>Panel Administrador</h1>
-<a href="/logout">Cerrar sesión</a>
+<div class="dashboard">
 
-<h2>Usuarios</h2>
-<table border="1">
-    <tr>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Rol</th>
-    </tr>
-    <tr th:each="usuario : ${usuarios}">
-        <td th:text="${usuario.nombre}"></td>
-        <td th:text="${usuario.email}"></td>
-        <td th:text="${usuario.rol}"></td>
-    </tr>
-</table>
+    <aside class="sidebar">
+        <h2>Plataforma Citas</h2>
+        <a href="/admin/dashboard">🏠 Dashboard</a>
+        <a href="#crear-profesional">➕ Profesional</a>
+        <a href="#crear-servicio">🧾 Servicio</a>
+        <a href="#servicios">💰 Precios</a>
+        <a href="#usuarios">👥 Usuarios</a>
+        <a href="#citas">📅 Citas</a>
+        <a href="/logout">🚪 Cerrar sesión</a>
+    </aside>
 
-<h2>Servicios</h2>
-<table border="1">
-    <tr>
-        <th>Nombre</th>
-        <th>Duración</th>
-        <th>Precio</th>
-    </tr>
-    <tr th:each="servicio : ${servicios}">
-        <td th:text="${servicio.nombre}"></td>
-        <td th:text="${servicio.duracionMinutos}"></td>
-        <td th:text="${servicio.precio}"></td>
-    </tr>
-</table>
+    <main class="main-content">
 
-<h2>Citas</h2>
-<table border="1">
-    <tr>
-        <th>Cliente</th>
-        <th>Profesional</th>
-        <th>Servicio</th>
-        <th>Fecha</th>
-        <th>Hora</th>
-        <th>Estado</th>
-    </tr>
-    <tr th:each="cita : ${citas}">
-        <td th:text="${cita.cliente.usuario.nombre}"></td>
-        <td th:text="${cita.profesional.usuario.nombre}"></td>
-        <td th:text="${cita.servicio.nombre}"></td>
-        <td th:text="${cita.fecha}"></td>
-        <td th:text="${cita.hora}"></td>
-        <td th:text="${cita.estado}"></td>
-    </tr>
-</table>
+        <section class="header">
+            <div>
+                <h1>Panel Administrador</h1>
+                <p>Gestiona usuarios, profesionales, servicios, precios y citas del sistema.</p>
+            </div>
+        </section>
 
+        <div class="alert-error" th:if="${error}" th:text="${error}"></div>
+        <div class="alert-success" th:if="${success}" th:text="${success}"></div>
+
+        <section class="grid">
+            <div class="stat-card">
+                <h3>Usuarios</h3>
+                <p th:text="${#lists.size(usuarios)}">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Profesionales</h3>
+                <p th:text="${#lists.size(profesionales)}">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Citas</h3>
+                <p th:text="${#lists.size(citas)}">0</p>
+            </div>
+        </section>
+
+        <section class="card" id="crear-profesional">
+            <h2>Registrar profesional</h2>
+
+            <form method="post" action="/admin/profesionales">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Correo</label>
+                        <input type="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" name="password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Especialidad</label>
+                        <input type="text" name="especialidad" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Descripción</label>
+                        <textarea name="descripcion" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn-primary">Crear profesional</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="card" id="crear-servicio">
+            <h2>Crear servicio</h2>
+
+            <form method="post" action="/admin/servicios">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Duración en minutos</label>
+                        <input type="number" name="duracionMinutos" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Precio</label>
+                        <input type="number" step="0.01" min="1" name="precio" required>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Descripción</label>
+                        <textarea name="descripcion" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn-primary">Crear servicio</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="card" id="servicios">
+            <h2>Servicios y precios</h2>
+            <p>
+                Desde aquí el administrador puede modificar los precios de las consultas o servicios disponibles.
+            </p>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Servicio</th>
+                    <th>Descripción</th>
+                    <th>Duración</th>
+                    <th>Precio actual</th>
+                    <th>Modificar precio</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="servicio : ${servicios}">
+                    <td th:text="${servicio.nombre}">Servicio</td>
+                    <td th:text="${servicio.descripcion}">Descripción</td>
+                    <td th:text="${servicio.duracionMinutos + ' min'}">Duración</td>
+                    <td th:text="${'$' + servicio.precio}">Precio</td>
+                    <td>
+                        <form th:action="@{/admin/servicios/{id}/precio(id=${servicio.id})}"
+                              method="post"
+                              style="display:flex; gap:10px; align-items:center;">
+                            <input type="number"
+                                   name="precio"
+                                   min="1"
+                                   step="0.01"
+                                   th:value="${servicio.precio}"
+                                   required>
+                            <button type="submit" class="action-btn">Guardar</button>
+                        </form>
+                    </td>
+                    <td>
+                        <span class="badge badge-completada" th:if="${servicio.activo}">Activo</span>
+                        <span class="badge badge-cancelada" th:if="${!servicio.activo}">Inactivo</span>
+                    </td>
+                </tr>
+
+                <tr th:if="${servicios == null or #lists.isEmpty(servicios)}">
+                    <td colspan="6">No hay servicios registrados.</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card" id="usuarios">
+            <h2>Usuarios registrados</h2>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.nombre}">Nombre</td>
+                    <td th:text="${usuario.email}">Email</td>
+                    <td th:text="${usuario.rol}">Rol</td>
+                    <td>
+                        <span class="badge badge-completada" th:if="${usuario.activo}">Activo</span>
+                        <span class="badge badge-cancelada" th:if="${!usuario.activo}">Inactivo</span>
+                    </td>
+                </tr>
+
+                <tr th:if="${usuarios == null or #lists.isEmpty(usuarios)}">
+                    <td colspan="4">No hay usuarios registrados.</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card" id="citas">
+            <h2>Citas</h2>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Profesional</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="cita : ${citas}">
+                    <td th:text="${cita.cliente.usuario.nombre}">Cliente</td>
+                    <td th:text="${cita.profesional.usuario.nombre}">Profesional</td>
+                    <td th:text="${cita.servicio.nombre}">Servicio</td>
+                    <td th:text="${cita.fecha}">Fecha</td>
+                    <td th:text="${cita.hora}">Hora</td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${cita.estado.name() == 'PENDIENTE'} ? ' badge-pendiente' :
+                                              (${cita.estado.name() == 'CONFIRMADA'} ? ' badge-confirmada' :
+                                              (${cita.estado.name() == 'CANCELADA'} ? ' badge-cancelada' : ' badge-completada'))"
+                              th:text="${cita.estado}">
+                            Estado
+                        </span>
+                    </td>
+                </tr>
+
+                <tr th:if="${citas == null or #lists.isEmpty(citas)}">
+                    <td colspan="6">No hay citas registradas.</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+</div>
+
+<script type="module" src="/js/main.js?v=20"></script>
 </body>
 </html>

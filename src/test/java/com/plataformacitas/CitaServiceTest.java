@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.plataformacitas.application.service.CitaService;
+import com.plataformacitas.application.service.HorarioDisponibleService;
 import com.plataformacitas.domain.enums.EstadoCita;
 import com.plataformacitas.domain.enums.RolUsuario;
 import com.plataformacitas.domain.exception.CitaNoDisponibleException;
@@ -47,6 +48,8 @@ class CitaServiceTest {
     @Mock
     private ServicioRepository servicioRepository;
 
+    private HorarioDisponibleService horarioDisponibleService;
+
     private CitaService citaService;
 
     private Cliente cliente;
@@ -55,11 +58,19 @@ class CitaServiceTest {
 
     @BeforeEach
     void setUp() {
+        horarioDisponibleService = new HorarioDisponibleService(null, null) {
+            @Override
+            public void validarDisponibilidadProfesional(Long profesionalId, LocalDate fecha, LocalTime hora) {
+                // Simulación para pruebas: se asume que el horario está disponible.
+            }
+        };
+
         citaService = new CitaService(
                 citaRepository,
                 clienteRepository,
                 profesionalRepository,
-                servicioRepository
+                servicioRepository,
+                horarioDisponibleService
         );
 
         Usuario usuarioCliente = new Usuario(
@@ -100,10 +111,12 @@ class CitaServiceTest {
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
         when(profesionalRepository.findById(1L)).thenReturn(Optional.of(profesional));
         when(servicioRepository.findById(1L)).thenReturn(Optional.of(servicio));
+
         when(citaRepository.existsByProfesionalAndFechaAndHora(profesional, fecha, hora))
                 .thenReturn(false);
 
-        when(citaRepository.save(any(Cita.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(citaRepository.save(any(Cita.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         Cita cita = citaService.agendarCita(
                 1L,
@@ -131,6 +144,7 @@ class CitaServiceTest {
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
         when(profesionalRepository.findById(1L)).thenReturn(Optional.of(profesional));
         when(servicioRepository.findById(1L)).thenReturn(Optional.of(servicio));
+
         when(citaRepository.existsByProfesionalAndFechaAndHora(profesional, fecha, hora))
                 .thenReturn(true);
 
@@ -163,6 +177,47 @@ class CitaServiceTest {
         Cita citaConfirmada = citaService.confirmar(1L);
 
         assertEquals(EstadoCita.CONFIRMADA, citaConfirmada.getEstado());
+        verify(citaRepository, times(1)).save(cita);
+    }
+
+    @Test
+    void debeReprogramarCitaCuandoNuevoHorarioEstaDisponible() {
+        LocalDate fechaOriginal = LocalDate.now().plusDays(1);
+        LocalTime horaOriginal = LocalTime.of(9, 0);
+
+        LocalDate nuevaFecha = LocalDate.now().plusDays(2);
+        LocalTime nuevaHora = LocalTime.of(15, 0);
+
+        Cita cita = new Cita(
+                cliente,
+                profesional,
+                servicio,
+                fechaOriginal,
+                horaOriginal,
+                "Reprogramación de prueba"
+        );
+
+        when(citaRepository.findById(1L)).thenReturn(Optional.of(cita));
+
+        when(citaRepository.existsByProfesionalAndFechaAndHoraAndIdNot(
+                profesional,
+                nuevaFecha,
+                nuevaHora,
+                cita.getId()
+        )).thenReturn(false);
+
+        when(citaRepository.save(cita)).thenReturn(cita);
+
+        Cita citaReprogramada = citaService.reprogramarCita(
+                1L,
+                nuevaFecha,
+                nuevaHora
+        );
+
+        assertEquals(nuevaFecha, citaReprogramada.getFecha());
+        assertEquals(nuevaHora, citaReprogramada.getHora());
+        assertEquals(EstadoCita.PENDIENTE, citaReprogramada.getEstado());
+
         verify(citaRepository, times(1)).save(cita);
     }
 }

@@ -2,70 +2,241 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cliente - Plataforma Citas</title>
+    <title>Panel Cliente | Plataforma Citas</title>
+    <link rel="stylesheet" href="/css/main.css?v=20">
 </head>
 <body>
 
-<h1>Panel de Cliente</h1>
-<p>Bienvenido, <strong th:text="${usuario.nombre}"></strong></p>
-<a href="/logout">Cerrar sesión</a>
+<div class="dashboard">
 
-<h2>Agendar cita</h2>
+    <aside class="sidebar">
+        <h2>Plataforma Citas</h2>
+        <a href="/cliente/dashboard">🏠 Mi panel</a>
+        <a href="#agendar">📅 Agendar cita</a>
+        <a href="#mis-citas">📋 Mis citas</a>
+        <a href="/logout">🚪 Cerrar sesión</a>
+    </aside>
 
-<form method="post" action="/cliente/citas">
+    <main class="main-content">
 
-    <label>Servicio</label>
-    <select name="servicioId" required>
-        <option th:each="servicio : ${servicios}"
-                th:value="${servicio.id}"
-                th:text="${servicio.nombre}">
-        </option>
-    </select>
+        <section class="header">
+            <div>
+                <h1>Panel de Cliente</h1>
+                <p>
+                    Bienvenido,
+                    <strong th:text="${usuario.nombre}">Cliente</strong>.
+                    Desde aquí puedes agendar, reprogramar y consultar tus citas.
+                </p>
+            </div>
+        </section>
 
-    <label>Profesional</label>
-    <select name="profesionalId" required>
-        <option th:each="profesional : ${profesionales}"
-                th:value="${profesional.id}"
-                th:text="${profesional.usuario.nombre + ' - ' + profesional.especialidad}">
-        </option>
-    </select>
+        <section class="grid">
+            <div class="stat-card">
+                <h3>Servicios disponibles</h3>
+                <p th:text="${#lists.size(servicios)}">0</p>
+            </div>
 
-    <input type="date" name="fecha" required>
-    <input type="time" name="hora" required>
-    <input type="text" name="observaciones" placeholder="Observaciones">
+            <div class="stat-card">
+                <h3>Profesionales</h3>
+                <p th:text="${#lists.size(profesionales)}">0</p>
+            </div>
 
-    <button type="submit">Agendar</button>
-</form>
+            <div class="stat-card">
+                <h3>Mis citas</h3>
+                <p th:text="${#lists.size(citas)}">0</p>
+            </div>
+        </section>
 
-<h2>Mis citas</h2>
+        <section class="card" th:if="${proximaCita != null}">
+            <h2>Recordatorio de próxima cita</h2>
+            <p>
+                Tienes una cita próxima el
+                <strong th:text="${proximaCita.fecha}">fecha</strong>
+                a las
+                <strong th:text="${proximaCita.hora}">hora</strong>
+                con
+                <strong th:text="${proximaCita.profesional.usuario.nombre}">profesional</strong>.
+            </p>
+        </section>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>Servicio</th>
-        <th>Profesional</th>
-        <th>Fecha</th>
-        <th>Hora</th>
-        <th>Estado</th>
-        <th>Acción</th>
-    </tr>
-    </thead>
+        <section class="card" id="agendar">
+            <h2>Agendar nueva cita</h2>
+            <p>
+                Selecciona el servicio, el profesional y la fecha. El sistema cargará automáticamente
+                las horas disponibles configuradas por el profesional.
+            </p>
 
-    <tbody>
-    <tr th:each="cita : ${citas}">
-        <td th:text="${cita.servicio.nombre}"></td>
-        <td th:text="${cita.profesional.usuario.nombre}"></td>
-        <td th:text="${cita.fecha}"></td>
-        <td th:text="${cita.hora}"></td>
-        <td th:text="${cita.estado}"></td>
-        <td>
-            <form th:action="@{/cliente/citas/{id}/cancelar(id=${cita.id})}" method="post">
-                <button type="submit">Cancelar</button>
+            <form method="post" action="/cliente/citas">
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label>Servicio</label>
+                        <select name="servicioId" required>
+                            <option value="">Selecciona un servicio</option>
+                            <option th:each="servicio : ${servicios}"
+                                    th:value="${servicio.id}"
+                                    th:text="${servicio.nombre + ' - $' + servicio.precio}">
+                                Servicio
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Profesional</label>
+                        <select name="profesionalId" id="profesionalId" required>
+                            <option value="">Selecciona un profesional</option>
+                            <option th:each="profesional : ${profesionales}"
+                                    th:value="${profesional.id}"
+                                    th:text="${profesional.usuario.nombre + ' - ' + profesional.especialidad}">
+                                Profesional
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" id="fechaCita" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hora disponible</label>
+                        <select name="hora" id="horaDisponible" required>
+                            <option value="">Primero selecciona profesional y fecha</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Observaciones</label>
+                        <textarea name="observaciones" rows="3" placeholder="Escribe una observación opcional"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn-primary">Agendar cita</button>
+                    </div>
+
+                </div>
             </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        </section>
+
+        <section class="card" id="mis-citas">
+            <h2>Mis citas agendadas</h2>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Servicio</th>
+                    <th>Profesional</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="cita : ${citas}">
+                    <td th:text="${cita.servicio.nombre}">Servicio</td>
+                    <td th:text="${cita.profesional.usuario.nombre}">Profesional</td>
+                    <td th:text="${cita.fecha}">Fecha</td>
+                    <td th:text="${cita.hora}">Hora</td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${cita.estado.name() == 'PENDIENTE'} ? ' badge-pendiente' :
+                                              (${cita.estado.name() == 'CONFIRMADA'} ? ' badge-confirmada' :
+                                              (${cita.estado.name() == 'CANCELADA'} ? ' badge-cancelada' : ' badge-completada'))"
+                              th:text="${cita.estado}">
+                            Estado
+                        </span>
+                    </td>
+                    <td>
+                        <a th:if="${cita.estado.name() != 'CANCELADA' and cita.estado.name() != 'COMPLETADA'}"
+                           th:href="@{/cliente/citas/{id}/reprogramar(id=${cita.id})}"
+                           class="action-btn">
+                            Reprogramar
+                        </a>
+
+                        <form th:if="${cita.estado.name() != 'CANCELADA' and cita.estado.name() != 'COMPLETADA'}"
+                              th:action="@{/cliente/citas/{id}/cancelar(id=${cita.id})}"
+                              method="post"
+                              style="display:inline;">
+                            <button type="submit" class="action-btn danger">Cancelar</button>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr th:if="${citas == null or #lists.isEmpty(citas)}">
+                    <td colspan="6">Aún no tienes citas registradas.</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+</div>
+
+<script type="module" src="/js/main.js?v=6"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const profesionalSelect = document.getElementById("profesionalId");
+        const fechaInput = document.getElementById("fechaCita");
+        const horaSelect = document.getElementById("horaDisponible");
+
+        if (!profesionalSelect || !fechaInput || !horaSelect) {
+            console.error("No se encontraron los campos necesarios para cargar horarios.");
+            return;
+        }
+
+        async function cargarHorasDisponibles() {
+            const profesionalId = profesionalSelect.value;
+            const fecha = fechaInput.value;
+
+            if (!profesionalId || !fecha) {
+                horaSelect.innerHTML = '<option value="">Primero selecciona profesional y fecha</option>';
+                return;
+            }
+
+            horaSelect.innerHTML = '<option value="">Cargando horarios...</option>';
+
+            try {
+                const url = `/api/profesionales/${profesionalId}/horarios-disponibles?fecha=${fecha}`;
+                const respuesta = await fetch(url);
+
+                if (!respuesta.ok) {
+                    horaSelect.innerHTML = '<option value="">Error cargando horarios</option>';
+                    console.error("Error HTTP:", respuesta.status);
+                    return;
+                }
+
+                const horas = await respuesta.json();
+
+                if (!horas || horas.length === 0) {
+                    horaSelect.innerHTML = '<option value="">No hay horarios disponibles para esta fecha</option>';
+                    return;
+                }
+
+                horaSelect.innerHTML = '<option value="">Selecciona una hora disponible</option>';
+
+                horas.forEach(function (hora) {
+                    const option = document.createElement("option");
+                    option.value = hora;
+                    option.textContent = hora;
+                    horaSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error("Error cargando horarios:", error);
+                horaSelect.innerHTML = '<option value="">Error cargando horarios</option>';
+            }
+        }
+
+        profesionalSelect.addEventListener("change", cargarHorasDisponibles);
+        fechaInput.addEventListener("change", cargarHorasDisponibles);
+
+        cargarHorasDisponibles();
+    });
+</script>
 
 </body>
 </html>

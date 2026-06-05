@@ -1,0 +1,55 @@
+.btn-primary {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 900;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 8px;
+    transition: var(--transition);
+    box-shadow: 0 16px 30px rgba(37, 99, 235, 0.22);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 40px rgba(37, 99, 235, 0.28);
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #ffffff;
+    background: #2563eb;
+    margin: 2px;
+    font-size: 14px;
+    font-weight: 800;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    background: #1d4ed8;
+}
+
+.action-btn.danger,
+.danger {
+    background: #dc2626;
+}
+
+.action-btn.danger:hover,
+.danger:hover {
+    background: #b91c1c;
+}

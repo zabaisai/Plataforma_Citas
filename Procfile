@@ -1,0 +1,1 @@
+web: java -jar target/plataforma-citas-0.0.1-SNAPSHOT.jar

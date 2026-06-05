@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plataformacitas.application.service.CitaService;
+import com.plataformacitas.application.service.HorarioDisponibleService;
 import com.plataformacitas.domain.model.Cita;
 import com.plataformacitas.domain.model.Profesional;
 import com.plataformacitas.domain.model.Servicio;
@@ -29,17 +30,20 @@ public class ApiController {
     private final ProfesionalRepository profesionalRepository;
     private final CitaRepository citaRepository;
     private final CitaService citaService;
+    private final HorarioDisponibleService horarioDisponibleService;
 
     public ApiController(
             ServicioRepository servicioRepository,
             ProfesionalRepository profesionalRepository,
             CitaRepository citaRepository,
-            CitaService citaService
+            CitaService citaService,
+            HorarioDisponibleService horarioDisponibleService
     ) {
         this.servicioRepository = servicioRepository;
         this.profesionalRepository = profesionalRepository;
         this.citaRepository = citaRepository;
         this.citaService = citaService;
+        this.horarioDisponibleService = horarioDisponibleService;
     }
 
     @GetMapping("/servicios")
@@ -55,6 +59,53 @@ public class ApiController {
     @GetMapping("/citas")
     public List<Cita> listarCitas() {
         return citaRepository.findAll();
+    }
+
+    @GetMapping("/profesionales/{id}/horarios-disponibles")
+    public List<String> listarHorasDisponibles(
+            @PathVariable Long id,
+            @RequestParam String fecha
+    ) {
+        LocalDate fechaConsulta = LocalDate.parse(fecha);
+
+        Profesional profesional = profesionalRepository.findById(id)
+                .orElseThrow();
+
+        List<LocalTime> horas = horarioDisponibleService.generarHorasDisponibles(
+                id,
+                fechaConsulta
+        );
+
+        return horas.stream()
+                .filter(hora -> !citaRepository.existsByProfesionalAndFechaAndHora(
+                        profesional,
+                        fechaConsulta,
+                        hora
+                ))
+                .map(LocalTime::toString)
+                .toList();
+    }
+
+    @GetMapping("/profesionales/{id}/disponibilidad")
+    public String consultarDisponibilidad(
+            @PathVariable Long id,
+            @RequestParam String fecha,
+            @RequestParam String hora
+    ) {
+        Profesional profesional = profesionalRepository.findById(id)
+                .orElseThrow();
+
+        boolean ocupado = citaRepository.existsByProfesionalAndFechaAndHora(
+                profesional,
+                LocalDate.parse(fecha),
+                LocalTime.parse(hora)
+        );
+
+        if (ocupado) {
+            return "Horario no disponible";
+        }
+
+        return "Horario disponible";
     }
 
     @PostMapping("/citas")
@@ -82,28 +133,6 @@ public class ApiController {
     @PatchMapping("/citas/{id}/completar")
     public Cita completarCita(@PathVariable Long id) {
         return citaService.completar(id);
-    }
-
-    @GetMapping("/profesionales/{id}/disponibilidad")
-    public String consultarDisponibilidad(
-            @PathVariable Long id,
-            @RequestParam String fecha,
-            @RequestParam String hora
-    ) {
-        Profesional profesional = profesionalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Profesional no encontrado."));
-
-        boolean ocupado = citaRepository.existsByProfesionalAndFechaAndHora(
-                profesional,
-                LocalDate.parse(fecha),
-                LocalTime.parse(hora)
-        );
-
-        if (ocupado) {
-            return "Horario no disponible";
-        }
-
-        return "Horario disponible";
     }
 
     public record CrearCitaRequest(

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo}">Plataforma Citas</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+
+<!-- Sidebar reutilizable para dashboards -->
+<aside class="sidebar" th:fragment="sidebar(rol)">
+    <h2>Plataforma Citas</h2>
+
+    <div th:if="${rol == 'CLIENTE'}">
+        <a href="/cliente/dashboard">🏠 Mi panel</a>
+        <a href="/cliente/dashboard#agendar">📅 Agendar cita</a>
+        <a href="/cliente/dashboard#mis-citas">📋 Mis citas</a>
+        <a href="/logout">🚪 Cerrar sesión</a>
+    </div>
+
+    <div th:if="${rol == 'PROFESIONAL'}">
+        <a href="/profesional/dashboard">🏠 Mi panel</a>
+        <a href="/profesional/horarios">🕒 Mis horarios</a>
+        <a href="/profesional/dashboard#agenda">📋 Agenda</a>
+        <a href="/logout">🚪 Cerrar sesión</a>
+    </div>
+
+    <div th:if="${rol == 'ADMIN'}">
+        <a href="/admin/dashboard">🏠 Dashboard</a>
+        <a href="/admin/dashboard#usuarios">👥 Usuarios</a>
+        <a href="/admin/dashboard#servicios">🧾 Servicios</a>
+        <a href="/admin/dashboard#profesionales">🧑‍⚕️ Profesionales</a>
+        <a href="/admin/dashboard#citas">📅 Citas</a>
+        <a href="/logout">🚪 Cerrar sesión</a>
+    </div>
+</aside>
+
+<!-- Header reutilizable -->
+<section class="header" th:fragment="header(titulo, descripcion)">
+    <div>
+        <h1 th:text="${titulo}">Título</h1>
+        <p th:text="${descripcion}">Descripción de la página</p>
+    </div>
+</section>
+
+<!-- Scripts reutilizables -->
+<div th:fragment="scripts">
+    <script type="module" src="/js/main.js"></script>
+</div>
+
+</body>
+</html>

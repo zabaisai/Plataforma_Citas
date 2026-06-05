@@ -2,42 +2,76 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title> | Plataforma Citas</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión | Plataforma Citas</title>
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 
 <div class="auth-page">
-    <div class="auth-card">
-        <h1></h1>
-        <p>Accede a tu panel para gestionar tus citas.</p>
 
-        <div class="alert-error" th:if="${error}" th:text="${error}"></div>
-        <div class="alert-success" th:if="${success}" th:text="${success}"></div>
+    <section class="auth-hero">
+        <div class="auth-badge">Sistema web de gestión de citas</div>
 
-        <form method="post" action="/login">
-            <div class="form-group">
-                <label>Correo electrónico</label>
-                <input type="email" name="email" placeholder="ejemplo@correo.com" required>
+        <h2>Organiza, agenda y controla tus citas en una sola plataforma.</h2>
+
+        <p>
+            Plataforma desarrollada en Java con Spring Boot, arquitectura por capas,
+            persistencia con SQLite, APIs internas, manejo de errores y validación de concurrencia.
+        </p>
+
+        <div class="hero-features">
+            <div class="hero-feature">
+                <strong>POO2</strong>
+                <span>Arquitectura limpia y separación de responsabilidades.</span>
             </div>
 
-            <div class="form-group">
-                <label>Contraseña</label>
-                <input type="password" name="password" placeholder="Tu contraseña" required>
+            <div class="hero-feature">
+                <strong>API</strong>
+                <span>Endpoints REST para integración del sistema.</span>
             </div>
 
-            <button type="submit" class="btn-primary">Ingresar</button>
-        </form>
-
-        <a class="auth-link" href="/registro">Crear cuenta nueva</a>
-
-        <div class="test-users">
-            <strong>Usuarios de prueba</strong>
-            <p>Admin: admin@citas.com / 123456</p>
-            <p>Profesional: profesional@citas.com / 123456</p>
+            <div class="hero-feature">
+                <strong>SQLite</strong>
+                <span>Persistencia portable y lista para despliegue.</span>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="auth-panel">
+        <div class="auth-card">
+            <h1>Iniciar sesión</h1>
+            <p>Accede a tu panel según tu rol dentro del sistema.</p>
+
+            <div class="alert-error" th:if="${error}" th:text="${error}"></div>
+            <div class="alert-success" th:if="${success}" th:text="${success}"></div>
+
+            <form method="post" action="/login">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" name="email" placeholder="ejemplo@correo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" placeholder="Tu contraseña" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Ingresar al sistema</button>
+            </form>
+
+            <a class="auth-link" href="/registro">Crear cuenta como cliente</a>
+
+            <div class="test-users">
+                <strong>Usuarios de prueba</strong>
+                <p>Admin: admin@citas.com / 123456</p>
+                <p>Profesional: profesional@citas.com / 123456</p>
+            </div>
+        </div>
+    </section>
+
 </div>
 
+<script type="module" src="/js/main.js"></script>
 </body>
 </html>
