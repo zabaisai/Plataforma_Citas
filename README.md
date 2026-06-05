@@ -1,315 +1,241 @@
 # Plataforma de Gestión de Citas
 
-Sistema web desarrollado en **Java con Spring Boot** para la gestión de citas entre clientes, profesionales y administradores. El proyecto permite registrar usuarios, administrar servicios, configurar horarios disponibles, agendar citas, reprogramarlas, cancelarlas y gestionar sus estados.
+Sistema web desarrollado en **Java con Spring Boot** para la programación, administración y seguimiento de citas entre clientes y profesionales.
 
-Este proyecto fue desarrollado como entrega académica para la materia **Programación Orientada a Objetos II (POO2)**, aplicando conceptos como arquitectura por capas, separación de responsabilidades, entidades de dominio, servicios, repositorios, DTOs, manejo de excepciones, validaciones y persistencia con base de datos.
+El proyecto permite gestionar usuarios, profesionales, servicios, horarios disponibles, agendamiento de citas, reprogramación, cancelación, confirmación, finalización y administración de precios. Además, cuenta con una interfaz web moderna, persistencia en SQLite, arquitectura por capas, manejo de errores, pruebas automatizadas y mejoras de accesibilidad.
 
----
-
-## Tabla de contenido
-
-* [Descripción general](#descripción-general)
-* [Objetivo del proyecto](#objetivo-del-proyecto)
-* [Tecnologías utilizadas](#tecnologías-utilizadas)
-* [Características principales](#características-principales)
-* [Roles del sistema](#roles-del-sistema)
-* [Arquitectura del proyecto](#arquitectura-del-proyecto)
-* [Temas de POO2 aplicados](#temas-de-poo2-aplicados)
-* [Estructura de carpetas](#estructura-de-carpetas)
-* [Base de datos](#base-de-datos)
-* [Configuración del entorno](#configuración-del-entorno)
-* [Cómo ejecutar el proyecto](#cómo-ejecutar-el-proyecto)
-* [Usuarios de prueba](#usuarios-de-prueba)
-* [Flujo de uso](#flujo-de-uso)
-* [Endpoints API](#endpoints-api)
-* [Pruebas](#pruebas)
-* [Despliegue](#despliegue)
-* [Autor](#autor)
+Este proyecto fue desarrollado como entrega académica para la materia **Programación Orientada a Objetos II (POO2)**.
 
 ---
 
 ## Descripción general
 
-La Plataforma de Gestión de Citas es una aplicación web que permite administrar el proceso completo de agendamiento entre clientes y profesionales.
+La Plataforma de Gestión de Citas permite que un cliente seleccione primero un servicio, luego el sistema carga automáticamente los profesionales relacionados con ese servicio, posteriormente el cliente selecciona una fecha y la aplicación muestra las horas disponibles del profesional.
 
-El sistema permite que los profesionales definan sus horarios disponibles, que los clientes seleccionen un servicio, un profesional y una fecha, y que el sistema cargue automáticamente las horas disponibles para realizar la reserva.
+El sistema está dividido en tres roles principales:
 
-Además, el administrador puede gestionar usuarios, profesionales, servicios, precios y visualizar las citas registradas dentro del sistema.
+* Administrador
+* Profesional
+* Cliente
+
+Cada rol cuenta con un panel independiente y funcionalidades específicas.
 
 ---
 
 ## Objetivo del proyecto
 
-Desarrollar una plataforma web funcional para la gestión de citas, aplicando buenas prácticas de programación orientada a objetos y arquitectura de software.
-
-El sistema busca resolver la necesidad de organizar citas de manera estructurada, evitando cruces de horarios, permitiendo la administración de estados y centralizando la información de clientes, profesionales, servicios y reservas.
+Desarrollar una aplicación web funcional para la gestión de citas, aplicando principios de Programación Orientada a Objetos II, arquitectura por capas, separación de responsabilidades, persistencia de datos, validaciones, excepciones personalizadas, pruebas y buenas prácticas de desarrollo.
 
 ---
 
 ## Tecnologías utilizadas
 
-* **Java 21**
-* **Spring Boot**
-* **Spring MVC**
-* **Spring Data JPA**
-* **Hibernate**
-* **SQLite**
-* **Thymeleaf**
-* **HTML5**
-* **CSS3**
-* **JavaScript**
-* **Maven**
-* **JUnit**
-* **Mockito**
-* **Git y GitHub**
+* Java
+* Spring Boot
+* Spring MVC
+* Spring Data JPA
+* Hibernate
+* SQLite
+* Thymeleaf
+* HTML5
+* CSS3
+* JavaScript
+* Maven
+* JUnit
+* Mockito
+* Git y GitHub
 
 ---
 
-## Características principales
+## Funcionalidades principales
 
 * Registro e inicio de sesión de usuarios.
-* Roles diferenciados: cliente, profesional y administrador.
-* Panel visual para cada tipo de usuario.
-* Registro de clientes.
-* Registro de profesionales desde el panel administrador.
+* Gestión de roles: administrador, profesional y cliente.
+* Dashboard independiente para cada tipo de usuario.
+* Creación de profesionales desde el panel administrador.
 * Creación de servicios desde el panel administrador.
-* Modificación de precios de servicios desde el panel administrador.
-* Configuración de horarios disponibles por parte del profesional.
-* Carga dinámica de horas disponibles para el cliente.
-* Agendamiento de citas.
-* Validación de disponibilidad antes de guardar una cita.
-* Cancelación de citas.
+* Asociación de servicios con especialidades.
+* Filtrado automático de profesionales según el servicio seleccionado.
+* Modificación de precios de servicios desde el administrador.
+* Configuración de horarios disponibles por profesional.
+* Carga dinámica de horas disponibles según profesional y fecha.
+* Agendamiento de citas por parte del cliente.
 * Reprogramación de citas.
-* Confirmación y finalización de citas por parte del profesional.
-* Recordatorios internos de citas próximas.
-* Manejo centralizado de excepciones.
-* Persistencia con SQLite.
-* Interfaz web modular con CSS y JavaScript.
+* Cancelación de citas.
+* Confirmación de citas por parte del profesional.
+* Finalización de citas por parte del profesional.
+* Visualización de citas registradas.
+* Recordatorios internos de próximas citas.
+* Manejo centralizado de errores.
+* Persistencia local con SQLite.
+* Interfaz moderna con CSS modular.
+* Mejoras de accesibilidad.
+* Pruebas unitarias y de repositorio.
 
 ---
 
 ## Roles del sistema
 
-### Cliente
+### Administrador
 
-El cliente puede:
+El administrador puede:
 
-* Registrarse en el sistema.
-* Iniciar sesión.
-* Consultar servicios disponibles.
-* Seleccionar un profesional.
-* Seleccionar una fecha.
-* Ver las horas disponibles del profesional.
-* Agendar una cita.
-* Reprogramar una cita.
-* Cancelar una cita.
-* Ver sus citas agendadas.
+* Ver el resumen general del sistema.
+* Crear profesionales.
+* Crear servicios.
+* Asociar servicios a especialidades.
+* Modificar precios de servicios.
+* Consultar usuarios registrados.
+* Consultar profesionales registrados.
+* Consultar citas del sistema.
 
 ### Profesional
 
 El profesional puede:
 
 * Iniciar sesión.
-* Configurar sus horarios disponibles.
-* Ver sus citas asignadas.
+* Consultar sus citas asignadas.
+* Configurar horarios disponibles.
 * Confirmar citas pendientes.
 * Completar citas confirmadas.
 * Cancelar citas cuando sea necesario.
-* Consultar recordatorios de citas próximas.
+* Ver recordatorios de próximas citas.
 
-### Administrador
+### Cliente
 
-El administrador puede:
+El cliente puede:
 
+* Registrarse.
 * Iniciar sesión.
-* Ver usuarios registrados.
-* Crear profesionales.
-* Crear servicios.
-* Modificar precios de servicios.
-* Consultar profesionales registrados.
-* Consultar servicios disponibles.
-* Ver todas las citas del sistema.
+* Seleccionar un servicio.
+* Ver profesionales relacionados con ese servicio.
+* Seleccionar fecha.
+* Ver horas disponibles.
+* Agendar citas.
+* Consultar sus citas.
+* Reprogramar citas.
+* Cancelar citas.
+
+---
+
+## Flujo principal del cliente
+
+El flujo de agendamiento funciona así:
+
+1. El cliente selecciona un servicio.
+2. El sistema carga los profesionales asociados a la especialidad del servicio.
+3. El cliente selecciona un profesional.
+4. El cliente selecciona una fecha.
+5. El sistema carga las horas disponibles del profesional.
+6. El cliente agenda la cita.
+7. La cita queda registrada con estado inicial pendiente.
 
 ---
 
 ## Arquitectura del proyecto
 
-El proyecto está organizado bajo una arquitectura por capas, separando responsabilidades para mejorar el mantenimiento, la escalabilidad y la claridad del código.
+El proyecto está organizado bajo una arquitectura por capas:
 
-### Capas principales
-
-#### Domain
-
-Contiene las entidades principales del negocio, enumeraciones y excepciones del dominio.
-
-Ejemplos:
-
-* `Usuario`
-* `Cliente`
-* `Profesional`
-* `Servicio`
-* `Cita`
-* `HorarioDisponible`
-* `EstadoCita`
-* `RolUsuario`
-* `DiaSemana`
-
-#### Application
-
-Contiene la lógica de negocio mediante servicios y DTOs.
-
-Ejemplos:
-
-* `AuthService`
-* `CitaService`
-* `ClienteService`
-* `ProfesionalService`
-* `ServicioService`
-* `HorarioDisponibleService`
-* `RecordatorioService`
-
-#### Infrastructure
-
-Contiene la persistencia y configuración técnica del sistema.
-
-Ejemplos:
-
-* `UsuarioRepository`
-* `ClienteRepository`
-* `ProfesionalRepository`
-* `ServicioRepository`
-* `CitaRepository`
-* `HorarioDisponibleRepository`
-* `SecurityConfig`
-* `DataInitializer`
-
-#### Presentation
-
-Contiene los controladores web y el manejo de las rutas.
-
-Ejemplos:
-
-* `AuthController`
-* `ClienteController`
-* `ProfesionalController`
-* `AdminController`
-* `ApiController`
-* `GlobalExceptionHandler`
-
----
-
-## Temas de POO2 aplicados
-
-Este proyecto aplica diferentes conceptos vistos en Programación Orientada a Objetos II:
-
-### 1. Encapsulamiento
-
-Las entidades del dominio manejan sus atributos de forma privada y exponen métodos para acceder o modificar información de manera controlada.
-
-Ejemplo:
-
-```java
-public void actualizarPrecio(Double nuevoPrecio) {
-    if (nuevoPrecio == null || nuevoPrecio <= 0) {
-        throw new IllegalArgumentException("El precio debe ser mayor a cero.");
-    }
-
-    this.precio = nuevoPrecio;
-}
+```txt
+src/main/java/com/plataformacitas/
+│
+├── domain/
+│   ├── model/
+│   ├── enums/
+│   └── exception/
+│
+├── application/
+│   ├── service/
+│   └── dto/
+│
+├── infrastructure/
+│   ├── repository/
+│   └── config/
+│
+└── presentation/
+    ├── controller/
+    └── exception/
 ```
 
-### 2. Abstracción
+### Capa domain
 
-El sistema separa la lógica de negocio en servicios especializados, evitando que los controladores contengan reglas internas del dominio.
-
-Ejemplo:
-
-* `CitaService` gestiona reglas de citas.
-* `HorarioDisponibleService` gestiona disponibilidad.
-* `ServicioService` gestiona servicios y precios.
-
-### 3. Separación de responsabilidades
-
-Cada clase tiene una responsabilidad clara:
-
-* Los modelos representan entidades.
-* Los servicios ejecutan lógica de negocio.
-* Los repositorios acceden a la base de datos.
-* Los controladores reciben solicitudes web.
-* Los DTOs transportan información entre capas.
-
-### 4. Manejo de excepciones
-
-Se implementó una jerarquía de excepciones del dominio mediante la clase base `DominioException`.
+Contiene las entidades, enumeraciones y excepciones principales del sistema.
 
 Ejemplos:
 
-* `CitaNoDisponibleException`
-* `DatosInvalidosException`
-* `HorarioNoDisponibleException`
-* `RecursoNoEncontradoException`
-* `UsuarioNoAutorizadoException`
+* Usuario
+* Cliente
+* Profesional
+* Servicio
+* Cita
+* HorarioDisponible
+* RolUsuario
+* EstadoCita
+* DiaSemana
 
-### 5. Persistencia de datos
+### Capa application
 
-Se utiliza Spring Data JPA con SQLite para almacenar usuarios, clientes, profesionales, servicios, horarios y citas.
-
-### 6. Validaciones de negocio
-
-El sistema valida condiciones como:
-
-* No crear citas en fechas pasadas.
-* No crear horarios donde la hora final sea menor que la hora inicial.
-* No agendar citas fuera del horario disponible del profesional.
-* No agendar dos citas en la misma fecha y hora para el mismo profesional.
-* No permitir precios menores o iguales a cero.
-
-### 7. DTOs
-
-Se implementan DTOs para transportar datos sin exponer directamente las entidades del dominio.
+Contiene los servicios de negocio y DTOs.
 
 Ejemplos:
 
-* `UsuarioDTO`
-* `ServicioDTO`
-* `CitaDTO`
-* `HorarioDisponibleDTO`
-* `ReprogramarCitaDTO`
+* AuthService
+* CitaService
+* ClienteService
+* ProfesionalService
+* ServicioService
+* HorarioDisponibleService
+* RecordatorioService
+
+### Capa infrastructure
+
+Contiene repositorios y configuración técnica.
+
+Ejemplos:
+
+* UsuarioRepository
+* ClienteRepository
+* ProfesionalRepository
+* ServicioRepository
+* CitaRepository
+* HorarioDisponibleRepository
+* DataInitializer
+
+### Capa presentation
+
+Contiene controladores web y controladores API.
+
+Ejemplos:
+
+* AuthController
+* ClienteController
+* ProfesionalController
+* AdminController
+* ApiController
+* GlobalExceptionHandler
 
 ---
 
 ## Estructura de carpetas
 
 ```txt
-Plataforma_Citas/
+PLATAFORMA_CITAS/
 │
 ├── pom.xml
 ├── README.md
 ├── Procfile
 ├── .env.example
+├── .gitignore
 │
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── com/plataformacitas/
 │   │   │       ├── PlataformaCitasApplication.java
-│   │   │       │
 │   │   │       ├── domain/
-│   │   │       │   ├── model/
-│   │   │       │   ├── enums/
-│   │   │       │   └── exception/
-│   │   │       │
 │   │   │       ├── application/
-│   │   │       │   ├── service/
-│   │   │       │   └── dto/
-│   │   │       │
 │   │   │       ├── infrastructure/
-│   │   │       │   ├── repository/
-│   │   │       │   └── config/
-│   │   │       │
 │   │   │       └── presentation/
-│   │   │           ├── controller/
-│   │   │           └── exception/
 │   │   │
 │   │   └── resources/
 │   │       ├── application.properties
@@ -323,27 +249,98 @@ Plataforma_Citas/
 │   └── test/
 │       └── java/
 │           └── com/plataformacitas/
+│
+└── target/
 ```
+
+---
+
+## Estructura CSS
+
+El frontend cuenta con una estructura modular de estilos:
+
+```txt
+src/main/resources/static/css/
+│
+├── main.css
+│
+├── base/
+│   ├── variables.css
+│   ├── reset.css
+│   └── animations.css
+│
+├── components/
+│   ├── badges.css
+│   ├── buttons.css
+│   ├── cards.css
+│   ├── forms.css
+│   ├── sidebar.css
+│   └── tables.css
+│
+└── pages/
+    ├── auth.css
+    └── dashboard.css
+```
+
+---
+
+## Interfaz de usuario
+
+La interfaz fue mejorada con:
+
+* Login visual.
+* Registro visual.
+* Dashboard moderno para administrador.
+* Dashboard moderno para profesional.
+* Dashboard moderno para cliente.
+* Sidebar visual con rol activo.
+* Tarjetas de resumen.
+* Formularios organizados.
+* Tablas mejoradas.
+* Botones de acción.
+* Mensajes de error y éxito.
+
+---
+
+## Accesibilidad
+
+El sistema incluye mejoras de accesibilidad para facilitar su uso con teclado, lectores de pantalla y navegación asistida.
+
+Se implementaron:
+
+* Etiquetas `label` asociadas a sus campos mediante `for` e `id`.
+* Atributos `aria-label`.
+* Atributos `aria-live`.
+* Roles `alert` y `status` para mensajes dinámicos.
+* Campos obligatorios identificados con `aria-required`.
+* Estados de error con `aria-invalid`.
+* Encabezados de tabla con `scope="col"`.
+* Clase `sr-only` para textos útiles para lectores de pantalla.
+* Foco visible para navegación con teclado.
+* Botón para saltar al contenido principal.
+* Soporte para usuarios que prefieren reducir animaciones mediante `prefers-reduced-motion`.
+
+Estas mejoras permiten una experiencia más clara, navegable y usable.
 
 ---
 
 ## Base de datos
 
-El proyecto utiliza **SQLite**, una base de datos liviana y portable. Esto permite ejecutar el sistema en cualquier computador sin necesidad de instalar un motor de base de datos externo como MySQL o PostgreSQL.
+El sistema utiliza **SQLite** como base de datos local y portable.
 
-Archivo de base de datos generado:
+Archivo generado localmente:
 
 ```txt
 plataforma_citas.db
 ```
 
-Este archivo no debe subirse al repositorio, por eso se recomienda incluirlo en `.gitignore`.
+Este archivo no debe subirse al repositorio, por eso debe estar incluido en `.gitignore`.
 
 ---
 
 ## Configuración del entorno
 
-El archivo `.env.example` contiene un ejemplo de variables de entorno:
+Archivo `.env.example` sugerido:
 
 ```env
 SERVER_PORT=8080
@@ -363,12 +360,16 @@ PROFESIONAL_EMAIL=profesional@citas.com
 PROFESIONAL_PASSWORD=123456
 ```
 
-El archivo `application.properties` puede usar estas variables con valores por defecto:
+---
+
+## Configuración de `application.properties`
+
+Ejemplo de configuración:
 
 ```properties
 spring.application.name=${APP_NAME:Plataforma Citas}
 
-server.port=${SERVER_PORT:8080}
+server.port=${PORT:8080}
 
 spring.datasource.url=${DATABASE_URL:jdbc:sqlite:plataforma_citas.db}
 spring.datasource.driver-class-name=${DATABASE_DRIVER:org.sqlite.JDBC}
@@ -389,13 +390,13 @@ spring.jpa.open-in-view=false
 git clone https://github.com/zabaisai/Plataforma_Citas.git
 ```
 
-### 2. Entrar a la carpeta del proyecto
+### 2. Entrar al proyecto
 
 ```bash
 cd Plataforma_Citas
 ```
 
-### 3. Compilar el proyecto
+### 3. Compilar
 
 ```bash
 mvn clean compile
@@ -439,71 +440,38 @@ Contraseña: 123456
 
 ### Cliente
 
-El cliente puede registrarse desde:
-
 ```txt
-http://localhost:8080/registro
+Correo: cliente@citas.com
+Contraseña: 123456
 ```
 
----
-
-## Flujo de uso
-
-### Flujo del profesional
-
-1. Iniciar sesión como profesional.
-2. Entrar al panel profesional.
-3. Ir a la sección “Mis horarios”.
-4. Registrar horarios disponibles por día.
-5. Consultar citas asignadas.
-6. Confirmar, cancelar o completar citas.
-
-### Flujo del cliente
-
-1. Registrarse como cliente.
-2. Iniciar sesión.
-3. Seleccionar un servicio.
-4. Seleccionar un profesional.
-5. Seleccionar una fecha.
-6. El sistema carga automáticamente las horas disponibles.
-7. Seleccionar una hora.
-8. Agendar la cita.
-9. Reprogramar o cancelar si es necesario.
-
-### Flujo del administrador
-
-1. Iniciar sesión como administrador.
-2. Crear profesionales.
-3. Crear servicios.
-4. Modificar precios.
-5. Consultar usuarios.
-6. Consultar citas del sistema.
+También se puede crear un nuevo cliente desde la pantalla de registro.
 
 ---
 
-## Endpoints API
+## Endpoints principales
 
-El sistema incluye endpoints internos para consultar información del sistema.
-
-### Listar servicios
+### Servicios
 
 ```http
 GET /api/servicios
 ```
 
-### Listar profesionales
+### Profesionales
 
 ```http
 GET /api/profesionales
 ```
 
-### Listar citas
+### Profesionales por servicio
 
 ```http
-GET /api/citas
+GET /api/servicios/{id}/profesionales
 ```
 
-### Consultar horarios disponibles de un profesional
+Este endpoint permite cargar únicamente los profesionales relacionados con la especialidad requerida por el servicio.
+
+### Horarios disponibles
 
 ```http
 GET /api/profesionales/{id}/horarios-disponibles?fecha=YYYY-MM-DD
@@ -521,13 +489,19 @@ Respuesta esperada:
 ["08:00", "08:30", "09:00", "09:30"]
 ```
 
-### Crear cita desde API
+### Citas
+
+```http
+GET /api/citas
+```
+
+### Crear cita
 
 ```http
 POST /api/citas
 ```
 
-Cuerpo de ejemplo:
+Ejemplo de cuerpo:
 
 ```json
 {
@@ -560,18 +534,59 @@ PATCH /api/citas/{id}/completar
 
 ---
 
+## Validaciones implementadas
+
+El sistema valida:
+
+* Que los campos obligatorios estén completos.
+* Que el precio de un servicio sea mayor a cero.
+* Que la especialidad requerida del servicio exista.
+* Que la hora final de un horario sea posterior a la hora inicial.
+* Que el profesional tenga disponibilidad en el día seleccionado.
+* Que no se agenden dos citas en la misma fecha y hora para el mismo profesional.
+* Que el cliente solo vea horas realmente disponibles.
+* Que no se puedan ejecutar acciones sobre recursos inexistentes.
+* Que se manejen errores de dominio de forma controlada.
+
+---
+
+## Manejo de errores
+
+El sistema cuenta con manejo centralizado de errores mediante excepciones personalizadas.
+
+Ejemplos:
+
+* CitaNoDisponibleException
+* DatosInvalidosException
+* HorarioNoDisponibleException
+* RecursoNoEncontradoException
+* UsuarioNoAutorizadoException
+
+Ejemplo de respuesta:
+
+```json
+{
+  "status": 400,
+  "error": "DATOS_INVALIDOS",
+  "mensaje": "La hora de fin debe ser posterior a la hora de inicio.",
+  "timestamp": "2026-06-04T20:40:12"
+}
+```
+
+---
+
 ## Pruebas
 
-El proyecto incluye pruebas unitarias para validar parte de la lógica principal.
+El proyecto incluye pruebas para validar la lógica principal.
 
-Ejemplos de pruebas:
+Archivos de prueba:
 
-* `CitaServiceTest`
-* `UsuarioServiceTest`
-* `CitaRepositoryTest`
-* `HorarioDisponibleServiceTest`
+* CitaServiceTest
+* CitaRepositoryTest
+* HorarioDisponibleServiceTest
+* UsuarioServiceTest
 
-Para ejecutar las pruebas:
+Ejecutar pruebas:
 
 ```bash
 mvn clean test
@@ -579,101 +594,53 @@ mvn clean test
 
 ---
 
-## Manejo de errores
+## Temas de POO2 aplicados
 
-El sistema cuenta con manejo de errores centralizado mediante `GlobalExceptionHandler`.
+### Encapsulamiento
 
-Las excepciones del dominio permiten controlar errores como:
+Las entidades protegen sus datos y exponen métodos controlados para modificar su estado.
 
-* Cita no disponible.
-* Datos inválidos.
-* Horario no disponible.
-* Recurso no encontrado.
-* Usuario no autorizado.
+Ejemplo:
 
-Ejemplo de respuesta de error:
+```java
+public void actualizarPrecio(Double nuevoPrecio) {
+    if (nuevoPrecio == null || nuevoPrecio <= 0) {
+        throw new IllegalArgumentException("El precio debe ser mayor a cero.");
+    }
 
-```json
-{
-  "timestamp": "2026-06-04T20:40:12",
-  "status": 400,
-  "error": "DATOS_INVALIDOS",
-  "mensaje": "La hora de fin debe ser posterior a la hora de inicio."
+    this.precio = nuevoPrecio;
 }
 ```
 
----
+### Abstracción
 
-## Validaciones importantes
+La lógica del negocio se encuentra en servicios especializados, evitando que los controladores tengan reglas complejas.
 
-El sistema valida que:
+### Separación de responsabilidades
 
-* La hora final de un horario sea posterior a la hora inicial.
-* Una cita no sea creada en una fecha pasada.
-* El profesional tenga horario disponible para la fecha seleccionada.
-* No exista otra cita en la misma fecha y hora para el mismo profesional.
-* Los precios de los servicios sean mayores a cero.
-* Los usuarios tengan roles definidos.
-* El cliente solo pueda seleccionar horas disponibles.
+Cada capa tiene una función clara:
 
----
+* Modelos: representan entidades del dominio.
+* Servicios: contienen lógica de negocio.
+* Repositorios: gestionan acceso a datos.
+* Controladores: reciben solicitudes web.
+* DTOs: transportan información entre capas.
 
-## Frontend
+### Excepciones personalizadas
 
-El frontend está construido con HTML, CSS y JavaScript modular.
+Se utilizan excepciones de dominio para representar errores del negocio.
 
-### CSS
+### Persistencia
 
-La estructura CSS está separada por responsabilidad:
+Se usa Spring Data JPA con SQLite para almacenar la información.
 
-```txt
-static/css/
-├── main.css
-├── base/
-│   ├── variables.css
-│   ├── reset.css
-│   └── animations.css
-├── components/
-│   ├── buttons.css
-│   ├── forms.css
-│   ├── cards.css
-│   ├── tables.css
-│   ├── badges.css
-│   └── sidebar.css
-└── pages/
-    ├── auth.css
-    └── dashboard.css
-```
+### Validación de disponibilidad
 
-### JavaScript
-
-La estructura JavaScript también se encuentra modularizada:
-
-```txt
-static/js/
-├── main.js
-├── modules/
-│   ├── alerts.js
-│   ├── forms.js
-│   ├── sidebar.js
-│   └── citas.js
-└── utils/
-    └── helpers.js
-```
-
-El módulo `citas.js` permite cargar dinámicamente los horarios disponibles de un profesional según la fecha seleccionada.
+El sistema revisa horarios, citas ocupadas y disponibilidad antes de agendar.
 
 ---
 
 ## Despliegue
-
-El proyecto está preparado para despliegue usando Maven y Spring Boot.
-
-Archivo `Procfile` sugerido:
-
-```txt
-web: java -jar target/plataforma-citas-0.0.1-SNAPSHOT.jar
-```
 
 Para generar el `.jar`:
 
@@ -684,14 +651,18 @@ mvn clean package
 Para ejecutar el `.jar`:
 
 ```bash
-java -jar target/plataforma-citas-0.0.1-SNAPSHOT.jar
+java -jar target/plataforma-citas-1.0.0.jar
+```
+
+Procfile sugerido:
+
+```Procfile
+web: java -Dserver.port=$PORT -jar target/plataforma-citas-1.0.0.jar
 ```
 
 ---
 
-## Recomendaciones para Git
-
-Se recomienda tener este contenido en `.gitignore`:
+## Gitignore recomendado
 
 ```gitignore
 target/
@@ -702,30 +673,48 @@ target/
 .DS_Store
 ```
 
-Esto evita subir archivos generados, bases de datos locales y configuraciones privadas.
+Si estos archivos ya habían sido subidos antes de crear el `.gitignore`, se deben quitar del seguimiento de Git con:
+
+```bash
+git rm -r --cached target
+git rm --cached plataforma_citas.db
+git rm --cached .env
+git add .gitignore
+git commit -m "chore: stop tracking ignored files"
+git push
+```
 
 ---
 
-## Estado del proyecto
+## Estado actual del proyecto
 
-El sistema cuenta con las funcionalidades principales implementadas:
+El proyecto cuenta con:
 
-* Login y registro.
-* Roles.
-* Dashboard por usuario.
-* Gestión de servicios.
+* Autenticación.
+* Registro de clientes.
+* Roles diferenciados.
+* Dashboard administrador.
+* Dashboard profesional.
+* Dashboard cliente.
 * Gestión de profesionales.
-* Configuración de horarios.
-* Carga de horarios disponibles.
-* Agendamiento.
+* Gestión de servicios.
+* Especialidades por servicio.
+* Filtrado de profesionales por servicio.
+* Gestión de precios desde administrador.
+* Gestión de horarios por profesional.
+* Carga dinámica de horarios disponibles.
+* Agendamiento de citas.
 * Reprogramación.
 * Cancelación.
 * Confirmación.
 * Finalización.
-* Modificación de precios desde administrador.
-* Manejo de errores.
-* Pruebas unitarias.
-* Interfaz web modular.
+* Recordatorios.
+* Accesibilidad.
+* Interfaz moderna.
+* CSS modular.
+* Pruebas.
+* README actualizado.
+* Configuración para ejecución local y despliegue.
 
 ---
 
